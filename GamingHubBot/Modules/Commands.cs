@@ -29,36 +29,57 @@ namespace GamingHubBot.Modules
         [Command("echo")]
         public async Task Echo(params String[] message)
         {
-            var User = Context.User as SocketGuildUser;
-            var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == "Game Master");
 
-            if (!User.Roles.Contains(role))
-            {
-                Console.WriteLine("The person IS the game master.");
-                await ReplyAsync("Nice!");
-            }
 
-            if (Context.User is SocketGuildUser socketUser)
-            {
-                SocketGuild socketGuild = socketUser.Guild;
-                SocketRole socketRole = socketGuild.GetRole(772788208500211724);
-                if (socketUser.Roles.Any(r => r.Id == socketRole.Id))
-                {
-                    await Context.Channel.SendMessageAsync("The user '" + socketUser.Username + "' already has the role '" + socketRole.Name + "'!");
-                }
-                else
-                {
-                    //await socketUser.AddRoleAsync(socketRole);
-                    await Context.Channel.SendMessageAsync("Added Role '" + socketRole.Name + "' to '" + socketUser.Username + "'!");
-                }
-            }
             await ReplyAsync(message[0]);
         }
 
-        [Command("role")]
+        [Command("addrole")]
         public async Task Role(params String[] message)
         {
-            await ReplyAsync($"Your role: {message[0]}");
+            var User = Context.User as SocketGuildUser;
+            var roles = Context.Guild.Roles;
+            var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == message[0]);
+            List<string> permittedRoles = new List<string>() { "Hunter", "Pirate", "S.W.A.T." };
+
+            Console.WriteLine($"Role was: {message[0]}");
+
+            //foreach (SocketRole role in roles)
+            //{
+            //    Console.Write($"Role: {role}\n");
+            //}
+
+            if (User.Roles.Contains(role))
+            {
+                await ReplyAsync($"You already have the role of {role}!");
+            }
+            else
+            {
+                if (permittedRoles.Contains(role.ToString()))
+                {
+                    await User.AddRoleAsync(role);
+                    await ReplyAsync($"You have been given the role of {role}!");
+                }
+                else
+                {
+                    await ReplyAsync("Sneaky bastard aintcha...");
+                }
+            }
+
+            //if (Context.User is SocketGuildUser socketUser)
+            //{
+            //    SocketGuild socketGuild = socketUser.Guild;
+            //    SocketRole socketRole = socketGuild.GetRole(772788208500211724);
+            //    if (socketUser.Roles.Any(r => r.Id == socketRole.Id))
+            //    {
+            //        await Context.Channel.SendMessageAsync("The user '" + socketUser.Username + "' already has the role '" + socketRole.Name + "'!");
+            //    }
+            //    else
+            //    {
+            //        //await socketUser.AddRoleAsync(socketRole);
+            //        await Context.Channel.SendMessageAsync("Added Role '" + socketRole.Name + "' to '" + socketUser.Username + "'!");
+            //    }
+            //}
         }
     }
 }
