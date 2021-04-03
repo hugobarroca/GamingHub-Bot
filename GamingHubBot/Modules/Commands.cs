@@ -44,11 +44,6 @@ namespace GamingHubBot.Modules
 
             Console.WriteLine($"Role was: {message[0]}");
 
-            //foreach (SocketRole role in roles)
-            //{
-            //    Console.Write($"Role: {role}\n");
-            //}
-
             if (User.Roles.Contains(role))
             {
                 await ReplyAsync($"You already have the role of {role}!");
@@ -65,21 +60,6 @@ namespace GamingHubBot.Modules
                     await ReplyAsync("Sneaky bastard aintcha...");
                 }
             }
-
-            //if (Context.User is SocketGuildUser socketUser)
-            //{
-            //    SocketGuild socketGuild = socketUser.Guild;
-            //    SocketRole socketRole = socketGuild.GetRole(772788208500211724);
-            //    if (socketUser.Roles.Any(r => r.Id == socketRole.Id))
-            //    {
-            //        await Context.Channel.SendMessageAsync("The user '" + socketUser.Username + "' already has the role '" + socketRole.Name + "'!");
-            //    }
-            //    else
-            //    {
-            //        //await socketUser.AddRoleAsync(socketRole);
-            //        await Context.Channel.SendMessageAsync("Added Role '" + socketRole.Name + "' to '" + socketUser.Username + "'!");
-            //    }
-            //}
         }
     }
 }
