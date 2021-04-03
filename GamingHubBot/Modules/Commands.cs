@@ -23,8 +23,8 @@ namespace GamingHubBot.Modules
             string message = "";
             message += "**!help**: Displays this informative message.\n";
             message += "**!ping**: Respondes with a pong to confirm online status.\n";
-            message += "**!addrole [ROLE]**: Adds specified role to the user. Use quotations marks for roles with spaces.\n";
-            message += "**!removerole [ROLE]**: Removes specified role from the user. Use quotations marks for roles with spaces.\n";
+            message += "**!addrole** *{role}*: Adds specified role to the user. Use quotations marks for roles with spaces.\n";
+            message += "**!removerole** *{role}*: Removes specified role from the user. Use quotations marks for roles with spaces.\n";
             await ReplyAsync(message);
         }
 
