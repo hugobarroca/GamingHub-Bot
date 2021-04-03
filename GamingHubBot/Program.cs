@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -28,7 +29,7 @@ namespace GamingHubBot
                 .AddSingleton(_commands)
                 .BuildServiceProvider();
 
-            string token = Environment.GetEnvironmentVariable("DiscordToken"); ;
+            string token = File.ReadAllText("token.txt");
 
             _client.Log += _client_Log;
 
