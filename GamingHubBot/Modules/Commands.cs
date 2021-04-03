@@ -23,6 +23,8 @@ namespace GamingHubBot.Modules
             string message = "";
             message += "**!help**: Displays this informative message.\n";
             message += "**!ping**: Respondes with a pong to confirm online status.\n";
+            message += "**!addrole [ROLE]**: Adds specified role to the user. Use quotations marks for roles with spaces.\n";
+            message += "**!removerole [ROLE]**: Removes specified role from the user. Use quotations marks for roles with spaces.\n";
             await ReplyAsync(message);
         }
 
@@ -35,16 +37,19 @@ namespace GamingHubBot.Modules
         }
 
         [Command("addrole")]
-        public async Task Role(params String[] message)
+        public async Task AddRole(params String[] message)
         {
-            var User = Context.User as SocketGuildUser;
+            var user = Context.User as SocketGuildUser;
             var roles = Context.Guild.Roles;
-            var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == message[0]);
-            List<string> permittedRoles = new List<string>() { "Hunter", "Pirate", "S.W.A.T." };
+            var role = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == message[0].ToLower());
+            List<string> permittedRoles = new List<string>() { "Hunter", "Pirate", "S.W.A.T.", "Summoner", "Tiefling", "Waifu", "Freeloaders", "Impostor", "Bishop" };
 
-            Console.WriteLine($"Role was: {message[0]}");
+            if (role == null) {
+                await ReplyAsync("Could not find that role. Check for typing errors you doofus!");
+                return;
+            }
 
-            if (User.Roles.Contains(role))
+            if (user.Roles.Contains(role))
             {
                 await ReplyAsync($"You already have the role of {role}!");
             }
@@ -52,12 +57,50 @@ namespace GamingHubBot.Modules
             {
                 if (permittedRoles.Contains(role.ToString()))
                 {
-                    await User.AddRoleAsync(role);
+                    await user.AddRoleAsync(role);
                     await ReplyAsync($"You have been given the role of {role}!");
                 }
                 else
                 {
-                    await ReplyAsync("Sneaky bastard aintcha...");
+                    if (role.ToString() == "Game Master")
+                    {
+                        await ReplyAsync("Sneaky bastard aintcha...");
+                    }
+                    else {
+                        await ReplyAsync("The role you tried to add is not a part of the permitted roles list!");
+                    }
+                }
+            }
+        }
+
+        [Command("removerole")]
+        public async Task RemoveRole(params String[] message)
+        {
+            var user = Context.User as SocketGuildUser;
+            var roles = Context.Guild.Roles;
+            var role = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == message[0].ToLower());
+            List<string> permittedRoles = new List<string>() { "Hunter", "Pirate", "S.W.A.T.", "Summoner", "Tiefling", "Waifu", "Freeloaders", "Impostor", "Bishop" };
+
+            if (role == null)
+            {
+                await ReplyAsync("Could not find that role. Check for typing errors you doofus!");
+                return;
+            }
+
+            if (!user.Roles.Contains(role))
+            {
+                await ReplyAsync($"You do not have the role of {role}!");
+            }
+            else
+            {
+                if (permittedRoles.Contains(role.ToString()))
+                {
+                    await user.RemoveRoleAsync(role);
+                    await ReplyAsync($"You have been removed from the role of {role}!");
+                }
+                else
+                {
+                    await ReplyAsync("Why would you try and do that? o.O");
                 }
             }
         }
