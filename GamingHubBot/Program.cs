@@ -1,20 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using GamingHubBot.Models;
+using Newtonsoft.Json;
 
 namespace GamingHubBot
 {
     class Program
     {
         static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
+
+        static HttpClient _apiClient = new HttpClient();
 
         private DiscordSocketClient _client;
         private CommandService _commands;
@@ -40,6 +43,24 @@ namespace GamingHubBot
             await _client.StartAsync();
 
             await Task.Delay(-1);
+
+            _apiClient.BaseAddress = new Uri("https://cat-fact.herokuapp.com/facts");
+            _apiClient.DefaultRequestHeaders.Accept.Clear();
+            _apiClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+        }
+
+        static public async Task<CatFact> GetCatFactAsync()
+        {
+            CatFact fact = null;
+            HttpResponseMessage response = await _apiClient.GetAsync("https://catfact.ninja/fact");
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                fact = JsonConvert.DeserializeObject<CatFact>(jsonString);
+                //await response.Content.ReadAsAsync<CatFact>();
+            }
+            return fact;
         }
 
 
