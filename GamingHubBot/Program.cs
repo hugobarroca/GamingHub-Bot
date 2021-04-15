@@ -67,14 +67,14 @@ namespace GamingHubBot
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                var pirate = JsonConvert.DeserializeObject<Pirate>(jsonString);
+                var pirate = JsonConvert.DeserializeObject<CatFact>(jsonString);
             }
             return fact;
         }
 
         static public async Task<string> GetPirateTranslationAsync(string text)
         {
-            string translation = "";
+            Root translation = new Root();
 
             string request = "https://api.funtranslations.com/translate/pirate.json?text=" + text;
 
@@ -84,10 +84,16 @@ namespace GamingHubBot
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                fact = JsonConvert.DeserializeObject<>(jsonString);
+                Console.WriteLine(jsonString);
+                return JsonConvert.DeserializeObject<Root>(jsonString).contents.translation;
             }
+            else
+            {
 
-            return translation;
+                var jsonString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<RootError>(jsonString).error.message;
+            }
+            return "";
         }
 
 

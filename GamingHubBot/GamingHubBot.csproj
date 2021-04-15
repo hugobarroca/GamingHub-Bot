@@ -117,10 +117,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\PirateApiError.cs" />
     <Compile Include="Logging\LoggingService.cs" />
     <Compile Include="Models\CatFact.cs" />
     <Compile Include="Modules\Commands.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.7.2.AssemblyAttributes.cs" />
+    <Compile Include="Models\PirateTranslationModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

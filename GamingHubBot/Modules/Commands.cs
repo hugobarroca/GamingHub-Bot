@@ -134,13 +134,14 @@ namespace GamingHubBot.Modules
 
             foreach (var word in message)
             {
-                initial += word;
+                initial += word + " ";
             }
 
             var user = Context.User as SocketGuildUser;
             Console.WriteLine($"User \"{user}\" requested a pirate translation!");
             string final = await Program.GetPirateTranslationAsync(initial);
-            await ReplyAsync(final);
+            if(final != null)
+                await ReplyAsync(final);
         }
 
         [Command("Arr?")]
