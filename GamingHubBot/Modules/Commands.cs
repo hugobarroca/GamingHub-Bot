@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using GamingHubBot.Models;
+using GamingHubBot.Infrastructure.Interfaces;
 
 namespace GamingHubBot.Modules
 {

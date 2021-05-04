@@ -8,21 +8,20 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using GamingHubBot.Models;
 using GamingHubBot.Logging;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using GamingHubBot.Infrastructure.Interfaces;
 
 namespace GamingHubBot
 {
     class Program
     {
-
         static void Main(string[] args) => new Program().RunBotAsync().GetAwaiter().GetResult();
 
-        private Dictionary<string, string> _roleByEmoji;
         static HttpClient _apiClient = new HttpClient();
+        private Dictionary<string, string> _roleByEmoji;
         private DiscordSocketClient _client;
         private CommandService _commands;
         private LoggingService _logger;
@@ -30,7 +29,6 @@ namespace GamingHubBot
 
         public async Task RunBotAsync()
         {
-
             _roleByEmoji = new Dictionary<string, string>();
             _client = new DiscordSocketClient();
             _commands = new CommandService();
@@ -60,6 +58,7 @@ namespace GamingHubBot
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+
         static public async Task<CatFact> GetCatFactAsync()
         {
             CatFact fact = null;
@@ -74,7 +73,7 @@ namespace GamingHubBot
 
         static public async Task<string> GetPirateTranslationAsync(string text)
         {
-            Root translation = new Root();
+            Root translation;
 
             string request = "https://api.funtranslations.com/translate/pirate.json?text=" + text;
 
@@ -85,7 +84,9 @@ namespace GamingHubBot
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine(jsonString);
-                return JsonConvert.DeserializeObject<Root>(jsonString).contents.translation;
+                translation = JsonConvert.DeserializeObject<Root>(jsonString);
+                string translatedString = translation.contents.translated;
+                return translatedString;
             }
             else
             {
@@ -93,7 +94,6 @@ namespace GamingHubBot
                 var jsonString = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<RootError>(jsonString).error.message;
             }
-            return "";
         }
 
 
