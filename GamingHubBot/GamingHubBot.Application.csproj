@@ -249,6 +249,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\CatFact.cs" />
+    <Compile Include="Models\CatFactModel.cs" />
     <Compile Include="Models\PirateApiError.cs" />
     <Compile Include="Logging\LoggingService.cs" />
     <Compile Include="Modules\Commands.cs" />

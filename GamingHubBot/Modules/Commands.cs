@@ -9,6 +9,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using GamingHubBot.Infrastructure.Interfaces;
+using GamingHubBot.Models;
 
 namespace GamingHubBot.Modules
 {
@@ -122,7 +123,7 @@ namespace GamingHubBot.Modules
         {
             var user = Context.User as SocketGuildUser;
             Console.WriteLine($"User \"{user}\" requested a cat fact!");
-            CatFact catfact = await Program.GetCatFactAsync();
+            CatFactModel catfact = await Program.GetCatFactAsync();
             await ReplyAsync(catfact.fact);
         }
 

@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using GamingHubBot.Infrastructure.Interfaces;
+using GamingHubBot.Models;
 
 namespace GamingHubBot
 {
@@ -59,14 +60,14 @@ namespace GamingHubBot
         }
 
 
-        static public async Task<CatFact> GetCatFactAsync()
+        static public async Task<CatFactModel> GetCatFactAsync()
         {
-            CatFact fact = null;
+            CatFactModel fact = null;
             HttpResponseMessage response = await _apiClient.GetAsync("https://catfact.ninja/fact");
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                var pirate = JsonConvert.DeserializeObject<CatFact>(jsonString);
+                var pirate = JsonConvert.DeserializeObject<CatFactModel>(jsonString);
             }
             return fact;
         }
