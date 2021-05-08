@@ -5,10 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Addons.SimplePermissions.JsonProvider" Version="0.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\GamingHubBot.Infrastructure\GamingHubBot.Infrastructure.csproj" />
     <ProjectReference Include="..\GamingHubBot\GamingHubBot.csproj" />
   </ItemGroup>
 

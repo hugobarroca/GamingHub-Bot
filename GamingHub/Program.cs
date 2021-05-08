@@ -67,7 +67,7 @@ namespace GamingHubBot
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                fact = JsonConvert.DeserializeObject<CatFact>(jsonString);
+                var pirate = JsonConvert.DeserializeObject<CatFact>(jsonString);
             }
             return fact;
         }

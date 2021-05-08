@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace GamingHubBot.Models
 {
-    public class CatFactModel
-    {
+    public class CatFact {
         public string fact { get; set; }
     }
 }

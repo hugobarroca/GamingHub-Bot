@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using GamingHubBot.Infrastructure.Interfaces;
-using GamingHubBot.Models;
+using GamingHubBot.Infrastructure.Gateways;
 
-namespace GamingHubBot.Modules
+namespace GamingHubBot.Application.Modules
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
@@ -123,27 +122,28 @@ namespace GamingHubBot.Modules
         {
             var user = Context.User as SocketGuildUser;
             Console.WriteLine($"User \"{user}\" requested a cat fact!");
-            CatFactModel catfact = await Program.GetCatFactAsync();
-            await ReplyAsync(catfact.fact);
+
+            CatFact catfact = await Program.GetCatFactAsync();
+            await ReplyAsync(catfact.Fact);
         }
 
 
-        [Command("Arrr")]
-        public async Task PirateTranslate(params String[] message)
-        {
-            string initial = "";
+        //[Command("Arrr")]
+        //public async Task PirateTranslate(params String[] message)
+        //{
+        //    string initial = "";
 
-            foreach (var word in message)
-            {
-                initial += word + " ";
-            }
+        //    foreach (var word in message)
+        //    {
+        //        initial += word + " ";
+        //    }
 
-            var user = Context.User as SocketGuildUser;
-            Console.WriteLine($"User \"{user}\" requested a pirate translation!");
-            string final = await Program.GetPirateTranslationAsync(initial);
-            if(final != null)
-                await ReplyAsync(final);
-        }
+        //    var user = Context.User as SocketGuildUser;
+        //    Console.WriteLine($"User \"{user}\" requested a pirate translation!");
+        //    string final = await Program.GetPirateTranslationAsync(initial);
+        //    if(final != null)
+        //        await ReplyAsync(final);
+        //}
 
         [Command("Arr?")]
         public async Task TimeUntillSoTS2()

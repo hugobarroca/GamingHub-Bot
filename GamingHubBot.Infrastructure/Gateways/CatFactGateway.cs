@@ -1,14 +1,16 @@
-﻿using GamingHubBot.Infrastructure.Interfaces;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using GamingHubBot.Infrastructure.Gateways.Models;
+using GamingHubBot.Application.Interfaces;
 
-namespace GamingHubBot.Infrastructure
+namespace GamingHubBot.Infrastructure.Gateways
+
 {
-    public class CatFactImp : CatFact
+    public class CatFactGateway : CatFactAPI
     {
-        public async Task<CatFact> getCatFact()
+        public async Task<CatFact> GetCatFact()
         {
             var apiClient = new HttpClient();
             CatFact fact = null;
