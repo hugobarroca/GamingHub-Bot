@@ -1,33 +1,35 @@
-﻿using Discord;
-using Discord.WebSocket;
-using System;
-using System.IO;
+﻿using System;
 using System.Threading.Tasks;
+using Topshelf;
 
 namespace GamingHubBot
 {
     class Program
     {
-        private DiscordSocketClient _client;
 
-		public static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
+        public static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
-		public async Task MainAsync()
-		{
-            _client = new DiscordSocketClient();
-            _client.Log += Log;
+        public async Task MainAsync()
+        {
+            var exitCode = HostFactory.Run(x =>
+            {
+                x.Service<GamingHubBot>(s =>
+                {
+                    s.ConstructUsing(gaminghubbot => new GamingHubBot());
+                    s.WhenStarted(gaminghubbot => gaminghubbot.Start());
+                    s.WhenStopped(gaminghubbot => gaminghubbot.Stop());
+                });
 
-            var token = File.ReadAllText("token.txt");
+                x.RunAsNetworkService();
 
-            await _client.LoginAsync(TokenType.Bot, token);
-            await _client.StartAsync();
-            await Task.Delay(-1);
+                x.SetServiceName("GamingHubBot");
+                x.SetDisplayName("Gaming Hub Bot");
+                x.SetDescription("This is the gaming hub bot service, which services all discord requests.");
+            });
+
+            int exitCodeValue = (int)Convert.ChangeType(exitCode, exitCode.GetTypeCode());
+            Environment.ExitCode = exitCodeValue;
         }
 
-		private Task Log(LogMessage msg)
-		{
-			Console.WriteLine(msg.ToString());
-			return Task.CompletedTask;
-		}
-	}
+    }
 }

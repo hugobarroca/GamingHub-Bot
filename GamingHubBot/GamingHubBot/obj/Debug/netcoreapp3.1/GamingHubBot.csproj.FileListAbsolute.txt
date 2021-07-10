@@ -20,3 +20,13 @@ D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\obj\Debug\netcoreapp
 D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\obj\Debug\netcoreapp3.1\GamingHubBot.dll
 D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\obj\Debug\netcoreapp3.1\GamingHubBot.pdb
 D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\obj\Debug\netcoreapp3.1\GamingHubBot.genruntimeconfig.cache
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\System.Diagnostics.EventLog.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\System.ServiceProcess.ServiceController.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\Topshelf.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\TopShelf.ServiceInstaller.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.EventLog.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.ServiceProcess.ServiceController.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll

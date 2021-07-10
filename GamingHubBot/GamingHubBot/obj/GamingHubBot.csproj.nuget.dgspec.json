@@ -44,6 +44,14 @@
             "Discord.Net": {
               "target": "Package",
               "version": "[2.4.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Topshelf": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [
