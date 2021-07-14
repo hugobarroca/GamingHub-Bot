@@ -69,6 +69,7 @@ namespace GamingHubBot
             _roleByEmoji.Add("🧂", "Summoner");
             _roleByEmoji.Add("🐉", "Hunter");
             _roleByEmoji.Add("🏴‍☠️", "Pirate");
+            _roleByEmoji.Add("👻", "Ghost");
             _roleByEmoji.Add("🤑", "Freeloaders");
         }
 

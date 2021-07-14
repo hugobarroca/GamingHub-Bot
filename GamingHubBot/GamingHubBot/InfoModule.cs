@@ -11,7 +11,7 @@ namespace GamingHubBot
 
     public class InfoModule : ModuleBase<SocketCommandContext>
     {
-        List<string> permittedRoles = new List<string>() { "Hunter", "Pirate", "S.W.A.T.", "Summoner", "Tiefling", "Waifu", "Freeloaders", "Impostor", "Bishop" };
+        List<string> permittedRoles = new List<string>() { "Bishop", "Freeloaders", "Ghost", "Hunter", "Impostor", "Pirate", "Summoner", "S.W.A.T.", "Tiefling", "Waifu"};
 
         [Command("say")]
 		[Summary("Echoes a message.")]
@@ -29,7 +29,7 @@ namespace GamingHubBot
             message += "**!permittedroles**: Lists all the roles that you can add or remove from yourself with this bot.\n";
             message += "**!addrole** *{role}*: Adds specified role to the user. Use quotations marks for roles with spaces.\n";
             message += "**!removerole** *{role}*: Removes specified role from the user. Use quotations marks for roles with spaces.\n";
-            message += "**!catfact**: Gives you a random cat fact.";
+            //message += "**!catfact**: Gives you a random cat fact.";
             await ReplyAsync(message);
         }
 
@@ -141,6 +141,15 @@ namespace GamingHubBot
                 }
             }
             await ReplyAsync($"**Permitted roles**: {roles}");
+        }
+
+        [Command("catfact")]
+        public async Task CatFact()
+        {
+            var user = Context.User as SocketGuildUser;
+            Console.WriteLine($"User \"{user}\" requested a catfact!");
+
+            await ReplyAsync($"Command currently being re-impletemented, please try again once the newer bot version comes out!.");
         }
     }
 }
