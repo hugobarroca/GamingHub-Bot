@@ -8,7 +8,7 @@ namespace ApiCalls
     {
         public static HttpClient ApiClient { get; set; }
 
-        public static void InitializeClient() 
+        public static void InitializeClient()
         {
             ApiClient = new HttpClient();
             ApiClient.BaseAddress = new Uri("https://cat-fact.herokuapp.com");

@@ -30,3 +30,7 @@ D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp
 D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.ServiceProcess.ServiceController.dll
 D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.dll
 D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\ApiCalls.dll
+D:\Code\DiscordBots\GamingHub-Bot\GamingHubBot\GamingHubBot\bin\Debug\netcoreapp3.1\ApiCalls.pdb

@@ -4,6 +4,7 @@ using System.Text;
 
 namespace GamingHubBot
 {
+    using ApiCalls;
     using Discord.Commands;
     using Discord.WebSocket;
     using System.Linq;
@@ -11,12 +12,12 @@ namespace GamingHubBot
 
     public class InfoModule : ModuleBase<SocketCommandContext>
     {
-        List<string> permittedRoles = new List<string>() { "Bishop", "Freeloaders", "Ghost", "Hunter", "Impostor", "Pirate", "Summoner", "S.W.A.T.", "Tiefling", "Waifu"};
+        List<string> permittedRoles = new List<string>() { "Bishop", "Freeloaders", "Ghost", "Hunter", "Impostor", "Pirate", "Summoner", "S.W.A.T.", "Tiefling", "Waifu" };
 
         [Command("say")]
-		[Summary("Echoes a message.")]
-		public Task SayAsync([Remainder][Summary("The text to echo")] string echo)
-			=> ReplyAsync(echo);
+        [Summary("Echoes a message.")]
+        public Task SayAsync([Remainder][Summary("The text to echo")] string echo)
+            => ReplyAsync(echo);
 
         [Command("help")]
         public async Task Help()
@@ -150,6 +151,19 @@ namespace GamingHubBot
             Console.WriteLine($"User \"{user}\" requested a catfact!");
 
             await ReplyAsync($"Command currently being re-impletemented, please try again once the newer bot version comes out!.");
+        }
+
+        [Command("weeb")]
+        public async Task AnimeQuote()
+        {
+            var user = Context.User as SocketGuildUser;
+            Console.WriteLine($"User \"{user}\" requested an anime quote!");
+
+            ApiHelper.InitializeClient();
+            AnimeApi api = new AnimeApi();
+            var animeQuote = await api.GetRandomAnimeQuote();
+
+            await ReplyAsync($"\"{animeQuote.Quote}\"\n-{animeQuote.Character}, from {animeQuote.Anime}");
         }
     }
 }
