@@ -30,6 +30,7 @@ namespace GamingHubBot
             message += "**!permittedroles**: Lists all the roles that you can add or remove from yourself with this bot.\n";
             message += "**!addrole** *{role}*: Adds specified role to the user. Use quotations marks for roles with spaces.\n";
             message += "**!removerole** *{role}*: Removes specified role from the user. Use quotations marks for roles with spaces.\n";
+            message += "**!weeb**: Gives you a random anime quote.";
             //message += "**!catfact**: Gives you a random cat fact.";
             await ReplyAsync(message);
         }
