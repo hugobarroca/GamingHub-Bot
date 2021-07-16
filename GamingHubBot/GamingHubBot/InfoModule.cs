@@ -31,7 +31,6 @@ namespace GamingHubBot
             message += "**!addrole** *{role}*: Adds specified role to the user. Use quotations marks for roles with spaces.\n";
             message += "**!removerole** *{role}*: Removes specified role from the user. Use quotations marks for roles with spaces.\n";
             message += "**!weeb**: Gives you a random anime quote.";
-            //message += "**!catfact**: Gives you a random cat fact.";
             await ReplyAsync(message);
         }
 
@@ -143,15 +142,6 @@ namespace GamingHubBot
                 }
             }
             await ReplyAsync($"**Permitted roles**: {roles}");
-        }
-
-        [Command("catfact")]
-        public async Task CatFact()
-        {
-            var user = Context.User as SocketGuildUser;
-            Console.WriteLine($"User \"{user}\" requested a catfact!");
-
-            await ReplyAsync($"Command currently being re-impletemented, please try again once the newer bot version comes out!.");
         }
 
         [Command("weeb")]
