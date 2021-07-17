@@ -8,11 +8,12 @@ namespace ApiCalls
 {
     public class AnimeApi
     {
+        private readonly string _baseURL = "https://animechan.vercel.app/api/";
+
         public async Task<AnimeQuoteModel> GetRandomAnimeQuote()
         {
-            string url = "https://animechan.vercel.app/api/random";
 
-            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(_baseURL + "random"))
             {
                 if (response.IsSuccessStatusCode)
                 {
