@@ -22,7 +22,8 @@ namespace ApiCalls
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    Console.WriteLine("There was an issue resolving the request to the ANIME-CHAN API.");
+                    return null;
                 }
             }
 
