@@ -33,6 +33,12 @@ namespace GamingHubBot
 
             _client.Log += Log;
 
+            if (!File.Exists("token.txt"))
+            {
+                await Log(new LogMessage(LogSeverity.Critical, "", "Token not found, quitting program."));
+                System.Environment.Exit(1);
+            }
+
             var token = File.ReadAllText("token.txt");
 
             await _client.LoginAsync(TokenType.Bot, token);
