@@ -2,6 +2,10 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+## Custom stuff
+*/.vs/
+bin\*
+
 /GamingHubBot/GamingHubBot/bin/Debug/netcoreapp3.1/token.txt
 
 *.suo
