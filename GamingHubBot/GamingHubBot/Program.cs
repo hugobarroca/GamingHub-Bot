@@ -1,25 +1,35 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+﻿using System;
 using System.Threading.Tasks;
-
+using Topshelf;
 
 namespace GamingHubBot
 {
     class Program
     {
 
-        public static void Main(string[] args) => new Program().MainAsync(args).GetAwaiter().GetResult();
+        public static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
-        public async Task MainAsync(string[] args)
+        public async Task MainAsync()
         {
-            IHost host = Host.CreateDefaultBuilder(args)
-            .ConfigureServices(services =>
+            var exitCode = HostFactory.Run(x =>
             {
-                services.AddHostedService<GamingHubBot>();
-            })
-            .Build();
+                x.Service<GamingHubBot>(s =>
+                {
+                    s.ConstructUsing(gaminghubbot => new GamingHubBot());
+                    s.WhenStarted(gaminghubbot => gaminghubbot.Start());
+                    s.WhenStopped(gaminghubbot => gaminghubbot.Stop());
+                });
 
-            await host.RunAsync();
+                x.RunAsNetworkService();
+
+                x.SetServiceName("GamingHubBot");
+                x.SetDisplayName("Gaming Hub Bot");
+                x.SetDescription("This is the gaming hub bot service, which services all discord requests.");
+            });
+
+            int exitCodeValue = (int)Convert.ChangeType(exitCode, exitCode.GetTypeCode());
+            Environment.ExitCode = exitCodeValue;
         }
+
     }
 }
