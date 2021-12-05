@@ -2,22 +2,23 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GamingHubBot
 {
-    public class GamingHubBot
+    public class GamingHubBot : BackgroundService
     {
         private DiscordSocketClient _client;
         private CommandService _commands;
         private IServiceProvider _services;
 
-
-        public async void Start() 
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _client = new DiscordSocketClient();
             _commands = new CommandService();
@@ -33,6 +34,7 @@ namespace GamingHubBot
 
             _client.Log += Log;
 
+            var name = Path.GetFullPath("token.txt");
             if (!File.Exists("token.txt"))
             {
                 await Log(new LogMessage(LogSeverity.Critical, "", "Token not found, quitting program."));
@@ -54,15 +56,5 @@ namespace GamingHubBot
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
         }
-    
-
-        public void Stop()
-        {
-
-        }
-
-
-
-
-}
+    }
 }
