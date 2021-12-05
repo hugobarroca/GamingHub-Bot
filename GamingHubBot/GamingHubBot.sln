@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingHubBot", "GamingHubBot\GamingHubBot.csproj", "{798DC3C3-0C3C-4F62-B605-DF7068E574DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiCalls", "ApiCalls\ApiCalls.csproj", "{2883BC3B-A332-4640-932C-9C6268DE7D10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GamingHubBot.Infrastructure", "ApiCalls\GamingHubBot.Infrastructure.csproj", "{2883BC3B-A332-4640-932C-9C6268DE7D10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
