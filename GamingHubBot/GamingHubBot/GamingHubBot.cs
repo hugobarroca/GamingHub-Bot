@@ -33,6 +33,8 @@ namespace GamingHubBot
 
             _client.Log += Log;
 
+            await Log(new LogMessage(LogSeverity.Info, "", $"Looking for token at {Path.GetFullPath("token.txt")}"));
+
             if (!File.Exists("token.txt"))
             {
                 await Log(new LogMessage(LogSeverity.Critical, "", "Token not found, quitting program."));
