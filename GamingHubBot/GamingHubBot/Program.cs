@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Topshelf;
+using Topshelf.Runtime.DotNetCore;
 
 namespace GamingHubBot
 {
@@ -13,6 +15,15 @@ namespace GamingHubBot
         {
             var exitCode = HostFactory.Run(x =>
             {
+                if (
+                  RuntimeInformation.IsOSPlatform(OSPlatform.OSX) ||
+                  RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                    )
+                {
+                    x.UseEnvironmentBuilder(
+                      target => new DotNetCoreEnvironmentBuilder(target)
+                    );
+                }
                 x.Service<GamingHubBot>(s =>
                 {
                     s.ConstructUsing(gaminghubbot => new GamingHubBot());
