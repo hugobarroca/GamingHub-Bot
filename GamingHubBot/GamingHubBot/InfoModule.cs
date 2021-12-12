@@ -27,6 +27,7 @@ namespace GamingHubBot
             string message = "";
             message += "**!help**: Displays this informative message.\n";
             message += "**!ping**: Respondes with a pong to confirm online status.\n";
+            message += "**!createrole**: Creates a new role from scratch.\n";
             message += "**!permittedroles**: Lists all the roles that you can add or remove from yourself with this bot.\n";
             message += "**!addrole** *{role}*: Adds specified role to the user. Use quotations marks for roles with spaces.\n";
             message += "**!removerole** *{role}*: Removes specified role from the user. Use quotations marks for roles with spaces.\n";
