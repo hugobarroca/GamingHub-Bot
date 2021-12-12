@@ -29,7 +29,8 @@ jobs:
       with:
         local: /home/runner/work/GamingHub-Bot/GamingHub-Bot/GamingHubBot/deploy/
         remote: ${{ secrets.REMOTE_TARGET }}
-        recursive: false
+        recursive: true
+        atomicPut: true
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         privateKey: ${{ secrets.SSHKEY }}
