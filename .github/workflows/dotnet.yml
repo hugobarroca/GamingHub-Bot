@@ -29,6 +29,7 @@ jobs:
       with:
         local: /home/runner/work/GamingHub-Bot/GamingHub-Bot/GamingHubBot/deploy/
         remote: ${{ secrets.REMOTE_TARGET }}
+        recursive: true
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         privateKey: ${{ secrets.SSHKEY }}
