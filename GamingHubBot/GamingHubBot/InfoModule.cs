@@ -145,6 +145,12 @@ namespace GamingHubBot
             await ReplyAsync($"**Permitted roles**: {roles}");
         }
 
+        [Command("createrole")]
+        public async Task CreateRole() 
+        {
+            await ReplyAsync("Command to be implemented");
+        }
+
         [Command("weeb")]
         public async Task AnimeQuote()
         {
