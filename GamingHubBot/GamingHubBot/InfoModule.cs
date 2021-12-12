@@ -31,7 +31,7 @@ namespace GamingHubBot
             message += "**!addrole** *{role}*: Adds specified role to the user. Use quotations marks for roles with spaces.\n";
             message += "**!removerole** *{role}*: Removes specified role from the user. Use quotations marks for roles with spaces.\n";
             message += "**!weeb**: Gives you a random anime quote.\n";
-            message += "test.";
+            message += "test.2";
             await ReplyAsync(message);
         }
 
