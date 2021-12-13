@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace GamingHubBot
 {
     using ApiCalls;
+    using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
     using System.Linq;
@@ -12,6 +12,7 @@ namespace GamingHubBot
 
     public class InfoModule : ModuleBase<SocketCommandContext>
     {
+        private readonly ulong _gameMasterId = 207178008706940928;
         List<string> permittedRoles = new List<string>() { "Bishop", "Freeloaders", "Ghost", "Hunter", "Impostor", "Pirate", "Summoner", "S.W.A.T.", "Tiefling", "Waifu" };
 
         [Command("say")]
@@ -74,12 +75,12 @@ namespace GamingHubBot
                 {
                     if (role.ToString() == "Game Master")
                     {
-                        Console.WriteLine($"User \"{user}\" tried to add itself to the role of \"{role}\", which is not a permitted role.");
+                        Console.WriteLine($"User \"{user}\" tried to add itself to the role of \"{role}\", which is not a permitted role.\n");
                         await ReplyAsync("Sneaky bastard aintcha...");
                     }
                     else
                     {
-                        Console.WriteLine($"User \"{user}\" tried to add itself to the role of \"{role}\", which is not a permitted role.");
+                        Console.WriteLine($"User \"{user}\" tried to add itself to the role of \"{role}\", which is not a permitted role.\n");
                         await ReplyAsync("The role you tried to add is not a part of the permitted roles list!");
                     }
                 }
@@ -146,9 +147,31 @@ namespace GamingHubBot
         }
 
         [Command("createrole")]
-        public async Task CreateRole() 
+        public async Task CreateRole(params String[] message)
         {
-            await ReplyAsync("Command to be implemented");
+            var user = Context.User;
+            if (user.Id != _gameMasterId)
+            {
+                await ReplyAsync("You don't have permission to run this command as of now.");
+            }
+
+            var roleName = message[0];
+
+            bool success = int.TryParse(message[1], out var red);
+            success = int.TryParse(message[2], out var green) && success;
+            success = int.TryParse(message[3], out var blue) && success;
+
+            if (!success)
+            {
+                await ReplyAsync("The color values were not all valid integers.");
+                return;
+            }
+
+            var permissions = new GuildPermissions();
+            var roleColor = new Color(red, green, blue);
+            await Context.Guild.CreateRoleAsync(roleName, permissions, roleColor, false, true);
+
+            await ReplyAsync($"Role ${roleName} was created successfully.");
         }
 
         [Command("weeb")]
