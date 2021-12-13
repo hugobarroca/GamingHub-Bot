@@ -167,11 +167,22 @@ namespace GamingHubBot
                 return;
             }
 
-            var permissions = new GuildPermissions();
+            //var permissions = new GuildPermissions();
+            var permissions = Context.Guild.GetUser(user.Id).GuildPermissions;
             var roleColor = new Color(red, green, blue);
-            await Context.Guild.CreateRoleAsync(roleName, permissions, roleColor, false, true);
+            try
+            {
+                await Context.Guild.CreateRoleAsync(roleName, permissions, roleColor, false, true);
+            }
+            catch (Exception ex) 
+            {
+                await ReplyAsync($"An exception has occurred. I am terribly sorry.");
+                Console.WriteLine(ex);
+            }
+            
 
-            await ReplyAsync($"Role ${roleName} was created successfully.");
+            await ReplyAsync($"Role {roleName} was created successfully.");
+            Console.WriteLine($"User {user.Username} with user ID {user.Id} created role {roleName}!");
         }
 
         [Command("weeb")]
