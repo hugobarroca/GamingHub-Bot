@@ -37,7 +37,7 @@ jobs:
     - name: Run SSH command
       uses: garygrossgarten/github-action-ssh@v0.3.0
       with:
-        command: chmod 777 /root/GamingHub-Bot/GamingHubBot; systemctl restart GamingHubBot
+        command: chmod 100 /root/GamingHub-Bot/GamingHubBot; systemctl restart GamingHubBot
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         privateKey: ${{ secrets.SSHKEY }}
