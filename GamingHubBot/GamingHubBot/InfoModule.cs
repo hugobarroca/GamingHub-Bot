@@ -87,7 +87,6 @@ namespace GamingHubBot
             }
         }
 
-
         [Command("removerole")]
         public async Task RemoveRole(params String[] message)
         {
@@ -179,6 +178,8 @@ namespace GamingHubBot
                 await ReplyAsync($"An exception has occurred. I am terribly sorry.");
                 Console.WriteLine(ex);
             }
+
+           var emoji = message[4];
             
 
             await ReplyAsync($"Role {roleName} was created successfully.");
