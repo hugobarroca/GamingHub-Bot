@@ -44,8 +44,6 @@ namespace GamingHubBot
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
 
-
-
             await Task.Delay(-1);
         }
 
@@ -54,15 +52,5 @@ namespace GamingHubBot
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
         }
-    
-
-        public void Stop()
-        {
-
-        }
-
-
-
-
-}
+    }
 }
