@@ -1,12 +1,10 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GamingHubBot
@@ -18,7 +16,6 @@ namespace GamingHubBot
         private readonly IServiceProvider _services;
         private Dictionary<string, string> _roleByEmoji;
 
-        // Retrieve client and CommandService instance via ctor
         public CommandHandler(DiscordSocketClient client, CommandService commands, IServiceProvider services)
         {
             _commands = commands;
@@ -31,9 +28,9 @@ namespace GamingHubBot
         public async Task InstallCommandsAsync()
         {
             _client.MessageReceived += HandleCommandAsync;
-
             _client.ReactionAdded += HandleReactionAddedAsync;
             _client.ReactionRemoved += HandleReactionRemovedAsync;
+
 
 
             await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),
@@ -60,7 +57,7 @@ namespace GamingHubBot
                 services: null);
         }
 
-        public async Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> cachedMessage, ISocketMessageChannel originChannel, SocketReaction reaction)
+        public async Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> cachedMessage, Cacheable<IMessageChannel, ulong> originChannel, SocketReaction reaction)
         {
             ulong guildId = 312101041380524032;
             var message = await cachedMessage.GetOrDownloadAsync();
@@ -105,7 +102,7 @@ namespace GamingHubBot
         }
 
         public async Task HandleReactionRemovedAsync(Cacheable<IUserMessage, ulong> cachedMessage,
-        ISocketMessageChannel originChannel, SocketReaction reaction)
+        Cacheable<IMessageChannel, ulong>  originChannel, SocketReaction reaction)
         {
             ulong guildId = 312101041380524032;
             var message = await cachedMessage.GetOrDownloadAsync();
