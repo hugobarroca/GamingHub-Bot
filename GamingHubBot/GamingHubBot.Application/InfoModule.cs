@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace GamingHubBot
+﻿namespace GamingHubBot
 {
-    using ApiCalls;
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
+    using GamingHubBot.Infrastructure.Gateways;
+    using global::GamingHubBot.Data;
     using System.Linq;
     using System.Threading.Tasks;
 
     public class InfoModule : ModuleBase<SocketCommandContext>
     {
+        private readonly IDataAccess _dataAccess;
+        private readonly IAnimeApi _animeApi;
+        public InfoModule(IDataAccess dataAccess, IAnimeApi animeApi)
+        {
+            _dataAccess = dataAccess;
+            _animeApi = animeApi;
+        }
+
         private readonly ulong _gameMasterId = 207178008706940928;
         List<string> permittedRoles = new List<string>() { "Bishop", "Freeloaders", "Ghost", "Hunter", "Impostor", "Pirate", "Summoner", "S.W.A.T.", "Tiefling", "Waifu" };
 
@@ -86,7 +92,6 @@ namespace GamingHubBot
                 }
             }
         }
-
 
         [Command("removerole")]
         public async Task RemoveRole(params String[] message)
@@ -179,6 +184,8 @@ namespace GamingHubBot
                 await ReplyAsync($"An exception has occurred. I am terribly sorry.");
                 Console.WriteLine(ex);
             }
+
+           var emoji = message[4];
             
 
             await ReplyAsync($"Role {roleName} was created successfully.");
@@ -191,11 +198,15 @@ namespace GamingHubBot
             var user = Context.User as SocketGuildUser;
             Console.WriteLine($"User \"{user}\" requested an anime quote!");
 
-            ApiHelper.InitializeClient();
-            AnimeApi api = new AnimeApi();
-            var animeQuote = await api.GetRandomAnimeQuote();
+            var animeQuote = await _animeApi.GetRandomAnimeQuote();
 
             await ReplyAsync($"\"{animeQuote.Quote}\"\n-{animeQuote.Character}, from {animeQuote.Anime}");
+        }
+
+        [Command("test")]
+        public async Task Test() 
+        {
+            var data = _dataAccess.GetData();
         }
     }
 }
