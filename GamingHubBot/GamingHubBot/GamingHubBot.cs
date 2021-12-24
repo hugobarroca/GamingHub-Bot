@@ -1,6 +1,12 @@
-﻿using Discord;
+﻿
+
+using ApiCalls;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using GamingHubBot.Data;
+using GamingHubBot.Infrastructure.Gateways;
+using GamingHubBot.Infrastructure.Repositories.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
@@ -22,6 +28,8 @@ namespace GamingHubBot
             _services = new ServiceCollection()
                 .AddSingleton(_client)
                 .AddSingleton(_commands)
+                .AddSingleton<IDataAccess, SqlDataAccess>()
+                .AddSingleton<IAnimeApi, AnimeApi>()
                 .BuildServiceProvider();
 
 

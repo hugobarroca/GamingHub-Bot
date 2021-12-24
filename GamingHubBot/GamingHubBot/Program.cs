@@ -1,6 +1,7 @@
-﻿using Discord.WebSocket;
-using System;
+﻿using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+
+//using IHost host = Host.CreateDefaultBuilder(args).Build();
 
 namespace GamingHubBot
 {
@@ -10,6 +11,12 @@ namespace GamingHubBot
 
         public async Task MainAsync()
         {
+            IConfiguration config = new ConfigurationBuilder()
+            .AddEnvironmentVariables()
+            .Build();
+
+            var connectionString = config.GetSection("connectionString");
+
             var bot = new GamingHubBot();
             bot.Start();
             await Task.Delay(-1);
