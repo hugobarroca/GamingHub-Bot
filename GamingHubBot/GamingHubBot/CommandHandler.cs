@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GamingHubBot
 {
-    public class CommandHandler
+    public class CommandHandler : ICommandHandler
     {
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
@@ -27,14 +27,13 @@ namespace GamingHubBot
 
         public async Task InstallCommandsAsync()
         {
+            //Event handlers
             _client.MessageReceived += HandleCommandAsync;
             _client.ReactionAdded += HandleReactionAddedAsync;
             _client.ReactionRemoved += HandleReactionRemovedAsync;
 
 
-
-            await _commands.AddModulesAsync(assembly: Assembly.GetEntryAssembly(),
-                                            services: _services);
+            await _commands.AddModuleAsync<InfoModule>(_services);
         }
 
         private async Task HandleCommandAsync(SocketMessage messageParam)
@@ -54,7 +53,7 @@ namespace GamingHubBot
             await _commands.ExecuteAsync(
                 context: context,
                 argPos: argPos,
-                services: null);
+                services: _services);
         }
 
         public async Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> cachedMessage, Cacheable<IMessageChannel, ulong> originChannel, SocketReaction reaction)
@@ -102,7 +101,7 @@ namespace GamingHubBot
         }
 
         public async Task HandleReactionRemovedAsync(Cacheable<IUserMessage, ulong> cachedMessage,
-        Cacheable<IMessageChannel, ulong>  originChannel, SocketReaction reaction)
+        Cacheable<IMessageChannel, ulong> originChannel, SocketReaction reaction)
         {
             ulong guildId = 312101041380524032;
             var message = await cachedMessage.GetOrDownloadAsync();
