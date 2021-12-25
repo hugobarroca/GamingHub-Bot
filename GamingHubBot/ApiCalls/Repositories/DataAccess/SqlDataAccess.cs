@@ -16,6 +16,11 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
             _options = options.Value;
         }
 
+        public string GetConnectionString()
+        {
+            return _options.DBConnection;
+        }
+
         public async Task<IEnumerable<DataEntity>> GetData()
         {
             var connectionId = _options.DBConnection;

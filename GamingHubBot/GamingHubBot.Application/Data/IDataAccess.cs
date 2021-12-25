@@ -7,6 +7,7 @@ namespace GamingHubBot.Data
 {
     public interface IDataAccess
     {
+        public string GetConnectionString();
         public Task<IEnumerable<DataEntity>> GetData();
     }
 }
