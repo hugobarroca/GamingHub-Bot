@@ -1,31 +1,25 @@
-﻿using GamingHubBot.Data;
+﻿using GamingHubBot.Application.Configuration;
+using GamingHubBot.Data;
 using GamingHubBot.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 
 namespace GamingHubBot.Infrastructure.Repositories.DataAccess
 {
     public class SqlDataAccess : IDataAccess
     {
-        IConfiguration _config;
-        public SqlDataAccess(IConfiguration config)
+        private readonly ConnectionStringOptions _options;
+        public SqlDataAccess(IOptions<ConnectionStringOptions> options)
         {
-            _config = config;
-        }
-
-        //public async Task<IEnumerable<SqlDataAccess>> GetAll()
-        public void GetAll()
-        {
-
+            _options = options.Value;
         }
 
         public async Task<IEnumerable<DataEntity>> GetData()
         {
-            var connectionId = "Default";
-            using IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionId));
+            var connectionId = _options.DBConnection;
+            //using IDbConnection connection = new SqlConnection(_config.GetConnectionString(connectionId));
 
             return new List<DataEntity>();
         }

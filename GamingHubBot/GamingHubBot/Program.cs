@@ -1,4 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ApiCalls;
+using Discord.Commands;
+using Discord.WebSocket;
+using GamingHubBot.Application.Configuration;
+using GamingHubBot.Data;
+using GamingHubBot.Infrastructure.Gateways;
+using GamingHubBot.Infrastructure.Repositories.DataAccess;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 //using IHost host = Host.CreateDefaultBuilder(args).Build();
@@ -11,15 +22,41 @@ namespace GamingHubBot
 
         public async Task MainAsync()
         {
-            IConfiguration config = new ConfigurationBuilder()
-            .AddEnvironmentVariables()
+            var builder = new ConfigurationBuilder();
+            BuildConfig(builder);
+            var config = builder.Build();
+
+            var options = new ConnectionStringOptions();
+            var connectionStringSection = config.GetSection(ConnectionStringOptions.ConnectionString);
+            connectionStringSection.Bind(options);
+
+            Console.WriteLine(options);
+
+            var host = Host.CreateDefaultBuilder()
+            .ConfigureServices((context, services) =>
+            {
+                services.AddSingleton<IGamingHubBot, GamingHubBot>()
+                .AddSingleton<ICommandHandler, CommandHandler>()
+                .AddSingleton<DiscordSocketClient>()
+                .AddSingleton<CommandService>()
+                .AddSingleton<IDataAccess, SqlDataAccess>()
+                .AddSingleton<IAnimeApi, AnimeApi>()
+                .Configure<ConnectionStringOptions>(config.GetSection(ConnectionStringOptions.ConnectionString))
+                .BuildServiceProvider();
+            })
             .Build();
 
-            var connectionString = config.GetSection("connectionString");
-
-            var bot = new GamingHubBot();
+            var bot = ActivatorUtilities.CreateInstance<GamingHubBot>(host.Services);
             bot.Start();
             await Task.Delay(-1);
+        }
+
+        static void BuildConfig(IConfigurationBuilder builder)
+        {
+            builder.SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                .AddEnvironmentVariables();
         }
 
     }

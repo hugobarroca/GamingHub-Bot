@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using GamingHubBot.Data;
 using GamingHubBot.Infrastructure.Gateways;
 using GamingHubBot.Infrastructure.Repositories.DataAccess;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
@@ -14,28 +15,21 @@ using System.Threading.Tasks;
 
 namespace GamingHubBot
 {
-    public class GamingHubBot
+    public class GamingHubBot : IGamingHubBot
     {
+        private ICommandHandler _commandHandler;
         private DiscordSocketClient _client;
-        private CommandService _commands;
-        private IServiceProvider _services;
 
-
-        public async void Start() 
+        public GamingHubBot(DiscordSocketClient client, IServiceProvider services, ICommandHandler commandHandler)
         {
-            _client = new DiscordSocketClient();
-            _commands = new CommandService();
-            _services = new ServiceCollection()
-                .AddSingleton(_client)
-                .AddSingleton(_commands)
-                .AddSingleton<IDataAccess, SqlDataAccess>()
-                .AddSingleton<IAnimeApi, AnimeApi>()
-                .BuildServiceProvider();
+            _commandHandler = commandHandler;
+            _client = client;
+        }
 
 
-            var commandHandler = new CommandHandler(_client, _commands, _services);
-
-            await commandHandler.InstallCommandsAsync();
+        public async void Start()
+        {
+            await _commandHandler.InstallCommandsAsync();
 
             _client.Log += Log;
 
@@ -57,6 +51,11 @@ namespace GamingHubBot
 
         private Task Log(LogMessage msg)
         {
+            string finalMessage = "";
+            if (msg.Severity == LogSeverity.Critical) 
+            {
+                finalMessage += "CRITICAL ERROR:";
+            }
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
         }
