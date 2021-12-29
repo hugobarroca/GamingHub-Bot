@@ -6,10 +6,13 @@ using GamingHubBot.Data;
 using GamingHubBot.Infrastructure.Gateways;
 using GamingHubBot.Infrastructure.Repositories.DataAccess;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 //using IHost host = Host.CreateDefaultBuilder(args).Build();
@@ -26,13 +29,19 @@ namespace GamingHubBot
             BuildConfig(builder);
             var config = builder.Build();
 
-            var options = new ConnectionStringOptions();
-            var connectionStringSection = config.GetSection(ConnectionStringOptions.ConnectionString);
-            connectionStringSection.Bind(options);
+            var envVariables = config.Providers.FirstOrDefault(x => x is EnvironmentVariablesConfigurationProvider);
 
-            Console.WriteLine(options);
+            var keys = builder.Build().AsEnumerable().ToList();
+
+            Console.WriteLine("Environment variables found:");
+            keys.ForEach(x => Console.WriteLine(x));
 
             var host = Host.CreateDefaultBuilder()
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddConsole();
+            })
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<IGamingHubBot, GamingHubBot>()
