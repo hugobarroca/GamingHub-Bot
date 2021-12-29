@@ -1,14 +1,6 @@
-﻿
-
-using ApiCalls;
-using Discord;
-using Discord.Commands;
+﻿using Discord;
 using Discord.WebSocket;
-using GamingHubBot.Data;
-using GamingHubBot.Infrastructure.Gateways;
-using GamingHubBot.Infrastructure.Repositories.DataAccess;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -19,9 +11,11 @@ namespace GamingHubBot
     {
         private ICommandHandler _commandHandler;
         private DiscordSocketClient _client;
+        private ILogger<GamingHubBot> _logger;
 
-        public GamingHubBot(DiscordSocketClient client, IServiceProvider services, ICommandHandler commandHandler)
+        public GamingHubBot(ILogger<GamingHubBot> logger, DiscordSocketClient client, IServiceProvider services, ICommandHandler commandHandler)
         {
+            _logger = logger;
             _commandHandler = commandHandler;
             _client = client;
         }
@@ -51,12 +45,13 @@ namespace GamingHubBot
 
         private Task Log(LogMessage msg)
         {
-            string finalMessage = "";
-            if (msg.Severity == LogSeverity.Critical) 
-            {
-                finalMessage += "CRITICAL ERROR:";
-            }
-            Console.WriteLine(msg.ToString());
+            if (msg.Severity == LogSeverity.Critical || msg.Severity == LogSeverity.Error) 
+                _logger.LogError(msg.Message);
+            if (msg.Severity == LogSeverity.Warning) 
+                _logger.LogWarning(msg.Message);
+            if (msg.Severity != LogSeverity.Info)
+                _logger.LogInformation(msg.Message);
+
             return Task.CompletedTask;
         }
     }
