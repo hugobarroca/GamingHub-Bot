@@ -1,8 +1,10 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GamingHubBot
@@ -21,8 +23,12 @@ namespace GamingHubBot
         }
 
 
-        public async void Start()
+        public async void Start(ConfigurationBuilder confP)
         {
+            var keys = confP.Build().AsEnumerable().ToList();
+            keys.ForEach(x => _logger.LogInformation("Key: " + x.Key));
+            keys.ForEach(x => _logger.LogInformation("Value: " + x.Value));
+
             await _commandHandler.InstallCommandsAsync();
 
             _client.Log += Log;
@@ -51,6 +57,8 @@ namespace GamingHubBot
                 _logger.LogWarning(msg.Message);
             if (msg.Severity != LogSeverity.Info)
                 _logger.LogInformation(msg.Message);
+            if (msg.Severity == LogSeverity.Debug) 
+                _logger.LogDebug(msg.Message);
 
             return Task.CompletedTask;
         }

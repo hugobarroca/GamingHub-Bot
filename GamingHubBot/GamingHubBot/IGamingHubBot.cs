@@ -1,7 +1,9 @@
-﻿namespace GamingHubBot
+﻿using Microsoft.Extensions.Configuration;
+
+namespace GamingHubBot
 {
     public interface IGamingHubBot
     {
-        void Start();
+        void Start(ConfigurationBuilder conf);
     }
 }

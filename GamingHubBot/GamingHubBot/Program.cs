@@ -31,11 +31,6 @@ namespace GamingHubBot
 
             var envVariables = config.Providers.FirstOrDefault(x => x is EnvironmentVariablesConfigurationProvider);
 
-            var keys = builder.Build().AsEnumerable().ToList();
-
-            Console.WriteLine("Environment variables found:");
-            keys.ForEach(x => Console.WriteLine(x));
-
             var host = Host.CreateDefaultBuilder()
             .ConfigureLogging(logging =>
             {
@@ -56,7 +51,7 @@ namespace GamingHubBot
             .Build();
 
             var bot = ActivatorUtilities.CreateInstance<GamingHubBot>(host.Services);
-            bot.Start();
+            bot.Start(builder);
             await Task.Delay(-1);
         }
 
