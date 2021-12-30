@@ -1,10 +1,10 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
+using GamingHubBot.Application.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace GamingHubBot
@@ -14,34 +14,26 @@ namespace GamingHubBot
         private ICommandHandler _commandHandler;
         private DiscordSocketClient _client;
         private ILogger<GamingHubBot> _logger;
+        private IOptions<GeneralSettings> _options;
 
-        public GamingHubBot(ILogger<GamingHubBot> logger, DiscordSocketClient client, IServiceProvider services, ICommandHandler commandHandler)
+        public GamingHubBot(ILogger<GamingHubBot> logger, DiscordSocketClient client, IServiceProvider services, ICommandHandler commandHandler, IOptions<GeneralSettings> options)
         {
             _logger = logger;
             _commandHandler = commandHandler;
             _client = client;
+            _options = options;
         }
 
 
-        public async void Start(ConfigurationBuilder confP)
+        public async void Start()
         {
-            var keys = confP.Build().AsEnumerable().ToList();
-            keys.ForEach(x => _logger.LogInformation("Key: " + x.Key));
-            keys.ForEach(x => _logger.LogInformation("Value: " + x.Value));
-
             await _commandHandler.InstallCommandsAsync();
 
             _client.Log += Log;
 
             await Log(new LogMessage(LogSeverity.Info, "", $"Looking for token at {Path.GetFullPath("token.txt")}"));
 
-            if (!File.Exists("token.txt"))
-            {
-                await Log(new LogMessage(LogSeverity.Critical, "", "Token not found, quitting program."));
-                System.Environment.Exit(1);
-            }
-
-            var token = File.ReadAllText("token.txt");
+            var token = _options.Value.Token;
 
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();

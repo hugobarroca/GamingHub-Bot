@@ -4,6 +4,6 @@ namespace GamingHubBot
 {
     public interface IGamingHubBot
     {
-        void Start(ConfigurationBuilder conf);
+        void Start();
     }
 }

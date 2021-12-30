@@ -1,7 +1,6 @@
 ﻿using GamingHubBot.Application.Configuration;
 using GamingHubBot.Data;
 using GamingHubBot.Entities;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,8 +9,8 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
 {
     public class SqlDataAccess : IDataAccess
     {
-        private readonly ConnectionStringOptions _options;
-        public SqlDataAccess(IOptions<ConnectionStringOptions> options)
+        private readonly GeneralSettings _options;
+        public SqlDataAccess(IOptions<GeneralSettings> options)
         {
             _options = options.Value;
         }

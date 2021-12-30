@@ -6,13 +6,11 @@ using GamingHubBot.Data;
 using GamingHubBot.Infrastructure.Gateways;
 using GamingHubBot.Infrastructure.Repositories.DataAccess;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.EnvironmentVariables;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 //using IHost host = Host.CreateDefaultBuilder(args).Build();
@@ -29,8 +27,6 @@ namespace GamingHubBot
             BuildConfig(builder);
             var config = builder.Build();
 
-            var envVariables = config.Providers.FirstOrDefault(x => x is EnvironmentVariablesConfigurationProvider);
-
             var host = Host.CreateDefaultBuilder()
             .ConfigureLogging(logging =>
             {
@@ -45,13 +41,13 @@ namespace GamingHubBot
                 .AddSingleton<CommandService>()
                 .AddSingleton<IDataAccess, SqlDataAccess>()
                 .AddSingleton<IAnimeApi, AnimeApi>()
-                .Configure<ConnectionStringOptions>(config.GetSection(ConnectionStringOptions.ConnectionString))
+                .Configure<GeneralSettings>(config)
                 .BuildServiceProvider();
             })
             .Build();
 
             var bot = ActivatorUtilities.CreateInstance<GamingHubBot>(host.Services);
-            bot.Start(builder);
+            bot.Start();
             await Task.Delay(-1);
         }
 
@@ -60,7 +56,7 @@ namespace GamingHubBot
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-                .AddEnvironmentVariables();
+                .AddJsonFile("secrets.json", optional: false, reloadOnChange: true);
         }
 
     }

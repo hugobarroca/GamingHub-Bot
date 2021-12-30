@@ -1,10 +1,8 @@
 ﻿namespace GamingHubBot.Application.Configuration
 {
-    public class ConnectionStringOptions
+    public class GeneralSettings
     {
-        public const string ConnectionString = "ConnectionStrings";
-
+        public string? Token { get; set; }
         public string? DBConnection { get; set; }
-
     }
 }
