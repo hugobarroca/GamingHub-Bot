@@ -13,6 +13,5 @@ namespace GamingHubBot.Infrastructure.Repositories.Models
         public string Red { get; set; }
         public string Blue { get; set; }
         public string Green { get; set; }
-
     }
 }

@@ -27,6 +27,7 @@ namespace GamingHubBot
 
         public async void Start()
         {
+            _logger.LogInformation("Starting up...");
             await _commandHandler.InstallCommandsAsync();
 
             _client.Log += Log;
@@ -37,7 +38,7 @@ namespace GamingHubBot
 
             await _client.LoginAsync(TokenType.Bot, token);
             await _client.StartAsync();
-
+            _logger.LogInformation("Bot started successfully!");
             await Task.Delay(-1);
         }
 

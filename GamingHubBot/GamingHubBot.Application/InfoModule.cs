@@ -203,22 +203,23 @@
             await ReplyAsync($"\"{animeQuote.Quote}\"\n-{animeQuote.Character}, from {animeQuote.Anime}");
         }
 
-        [Command("testDBconnection")]
-        public async Task Test() 
+        [Command("colors")]
+        public async Task AvailableColors() 
         {
-            var user = Context.User;
-            if (user.Id != _gameMasterId)
+            var colors = await _dataAccess.GetColors();
+
+            if (colors == null) 
             {
-                await ReplyAsync("You don't have permission to run this command as of now.");
-            }
-            var moreData = _dataAccess.GetData();
-            var data = _dataAccess.GetConnectionString();
-            if (string.IsNullOrWhiteSpace(data))
-            {
-                await ReplyAsync($"Connection String was not found.");
+                await ReplyAsync("Sorry, I couldn't get the color list at this time. :(");
                 return;
             }
-            await ReplyAsync($"ConnectionStringFound: {data}");
+
+            string response = "Available colors are: \n";
+            foreach (var color in colors) 
+            {
+                response += color.Name + "\n";
+            }
+            await ReplyAsync(response);
         }
     }
 }

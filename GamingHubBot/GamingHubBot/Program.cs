@@ -1,4 +1,5 @@
 ﻿using ApiCalls;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using GamingHubBot.Application.Configuration;
@@ -13,8 +14,6 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-//using IHost host = Host.CreateDefaultBuilder(args).Build();
-
 namespace GamingHubBot
 {
     class Program
@@ -27,6 +26,11 @@ namespace GamingHubBot
             BuildConfig(builder);
             var config = builder.Build();
 
+            var socketConfig = new DiscordSocketConfig()
+            {
+                GatewayIntents = GatewayIntents.GuildMessageReactions | GatewayIntents.GuildMessages,
+            };
+
             var host = Host.CreateDefaultBuilder()
             .ConfigureLogging(logging =>
             {
@@ -37,7 +41,7 @@ namespace GamingHubBot
             {
                 services.AddSingleton<IGamingHubBot, GamingHubBot>()
                 .AddSingleton<ICommandHandler, CommandHandler>()
-                .AddSingleton<DiscordSocketClient>()
+                .AddSingleton<DiscordSocketClient>(x => new DiscordSocketClient(socketConfig))
                 .AddSingleton<CommandService>()
                 .AddSingleton<IDataAccess, SqlDataAccess>()
                 .AddSingleton<IAnimeApi, AnimeApi>()
