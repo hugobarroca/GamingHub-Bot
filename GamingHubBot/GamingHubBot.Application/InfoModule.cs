@@ -203,10 +203,21 @@
             await ReplyAsync($"\"{animeQuote.Quote}\"\n-{animeQuote.Character}, from {animeQuote.Anime}");
         }
 
-        [Command("test")]
+        [Command("testDBconnection")]
         public async Task Test() 
         {
-            var data = _dataAccess.GetData();
+            var user = Context.User;
+            if (user.Id != _gameMasterId)
+            {
+                await ReplyAsync("You don't have permission to run this command as of now.");
+            }
+            var data = _dataAccess.GetConnectionString();
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                await ReplyAsync($"Connection String was not found.");
+                return;
+            }
+            await ReplyAsync($"ConnectionStringFound: {data}");
         }
     }
 }

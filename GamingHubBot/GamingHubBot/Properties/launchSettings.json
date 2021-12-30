@@ -1,10 +1,7 @@
 {
   "profiles": {
     "GamingHubBot": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "ConnectionStrings__DBConnection": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-      }
+      "commandName": "Project"
     }
   }
 }

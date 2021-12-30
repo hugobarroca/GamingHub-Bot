@@ -8,6 +8,7 @@ using GamingHubBot.Infrastructure.Repositories.DataAccess;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -26,13 +27,12 @@ namespace GamingHubBot
             BuildConfig(builder);
             var config = builder.Build();
 
-            var options = new ConnectionStringOptions();
-            var connectionStringSection = config.GetSection(ConnectionStringOptions.ConnectionString);
-            connectionStringSection.Bind(options);
-
-            Console.WriteLine(options);
-
             var host = Host.CreateDefaultBuilder()
+            .ConfigureLogging(logging =>
+            {
+                logging.ClearProviders();
+                logging.AddConsole();
+            })
             .ConfigureServices((context, services) =>
             {
                 services.AddSingleton<IGamingHubBot, GamingHubBot>()
@@ -41,7 +41,7 @@ namespace GamingHubBot
                 .AddSingleton<CommandService>()
                 .AddSingleton<IDataAccess, SqlDataAccess>()
                 .AddSingleton<IAnimeApi, AnimeApi>()
-                .Configure<ConnectionStringOptions>(config.GetSection(ConnectionStringOptions.ConnectionString))
+                .Configure<GeneralSettings>(config)
                 .BuildServiceProvider();
             })
             .Build();
@@ -56,7 +56,7 @@ namespace GamingHubBot
             builder.SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
-                .AddEnvironmentVariables();
+                .AddJsonFile("secrets.json", optional: false, reloadOnChange: true);
         }
 
     }
