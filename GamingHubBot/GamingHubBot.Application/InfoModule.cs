@@ -211,6 +211,7 @@
             {
                 await ReplyAsync("You don't have permission to run this command as of now.");
             }
+            var moreData = _dataAccess.GetData();
             var data = _dataAccess.GetConnectionString();
             if (string.IsNullOrWhiteSpace(data))
             {
