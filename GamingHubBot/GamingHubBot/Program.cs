@@ -28,7 +28,10 @@ namespace GamingHubBot
 
             var socketConfig = new DiscordSocketConfig()
             {
-                GatewayIntents = GatewayIntents.GuildMessageReactions | GatewayIntents.GuildMessages,
+                GatewayIntents = 
+                GatewayIntents.GuildMessageReactions | 
+                GatewayIntents.GuildMessages |
+                GatewayIntents.Guilds
             };
 
             var host = Host.CreateDefaultBuilder()
