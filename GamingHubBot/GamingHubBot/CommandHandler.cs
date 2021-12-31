@@ -1,5 +1,5 @@
 ﻿using Discord;
-using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -12,48 +12,144 @@ namespace GamingHubBot
     public class CommandHandler : ICommandHandler
     {
         private readonly DiscordSocketClient _client;
-        private readonly CommandService _commands;
+        private readonly InteractionService _interactionService;
         private readonly IServiceProvider _services;
         private Dictionary<string, string> _roleByEmoji;
 
-        public CommandHandler(DiscordSocketClient client, CommandService commands, IServiceProvider services)
+        public CommandHandler(DiscordSocketClient client, InteractionService interactionService, IServiceProvider services)
         {
-            _commands = commands;
+            _interactionService = interactionService;
             _client = client;
             _services = services;
             _roleByEmoji = new Dictionary<string, string>();
             PopulateRoleByEmoji();
         }
 
-        public async Task InstallCommandsAsync()
+        public async Task InitializeAsync()
         {
+            await _interactionService.AddModuleAsync<InfoModule>(_services);
+            await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
+
+            _client.InteractionCreated += HandleInteraction;
+
+
+            //_client.InteractionCreated += HandleInteraction;
+
+            // Process the command execution results 
+            _interactionService.SlashCommandExecuted += SlashCommandExecuted;
+            _interactionService.ContextCommandExecuted += ContextCommandExecuted;
+            _interactionService.ComponentCommandExecuted += ComponentCommandExecuted;
+
             //Event handlers
-            _client.MessageReceived += HandleCommandAsync;
+            //_client.MessageReceived += HandleCommandAsync;
             _client.ReactionAdded += HandleReactionAddedAsync;
             _client.ReactionRemoved += HandleReactionRemovedAsync;
 
 
-            await _commands.AddModuleAsync<InfoModule>(_services);
         }
 
-        private async Task HandleCommandAsync(SocketMessage messageParam)
+
+
+        private Task ComponentCommandExecuted(ComponentCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
         {
-            var message = messageParam as SocketUserMessage;
-            if (message == null) return;
+            if (!arg3.IsSuccess)
+            {
+                switch (arg3.Error)
+                {
+                    case InteractionCommandError.UnmetPrecondition:
+                        // implement
+                        break;
+                    case InteractionCommandError.UnknownCommand:
+                        // implement
+                        break;
+                    case InteractionCommandError.BadArgs:
+                        // implement
+                        break;
+                    case InteractionCommandError.Exception:
+                        // implement
+                        break;
+                    case InteractionCommandError.Unsuccessful:
+                        // implement
+                        break;
+                    default:
+                        break;
+                }
+            }
 
-            int argPos = 0;
+            return Task.CompletedTask;
+        }
 
-            if (!(message.HasCharPrefix('!', ref argPos) ||
-                message.HasMentionPrefix(_client.CurrentUser, ref argPos)) ||
-                message.Author.IsBot)
-                return;
+        private Task ContextCommandExecuted(ContextCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
+        {
+            if (!arg3.IsSuccess)
+            {
+                switch (arg3.Error)
+                {
+                    case InteractionCommandError.UnmetPrecondition:
+                        // implement
+                        break;
+                    case InteractionCommandError.UnknownCommand:
+                        // implement
+                        break;
+                    case InteractionCommandError.BadArgs:
+                        // implement
+                        break;
+                    case InteractionCommandError.Exception:
+                        // implement
+                        break;
+                    case InteractionCommandError.Unsuccessful:
+                        // implement
+                        break;
+                    default:
+                        break;
+                }
+            }
 
-            var context = new SocketCommandContext(_client, message);
+            return Task.CompletedTask;
+        }
 
-            await _commands.ExecuteAsync(
-                context: context,
-                argPos: argPos,
-                services: _services);
+        private Task SlashCommandExecuted(SlashCommandInfo arg1, Discord.IInteractionContext arg2, IResult arg3)
+        {
+            if (!arg3.IsSuccess)
+            {
+                switch (arg3.Error)
+                {
+                    case InteractionCommandError.UnmetPrecondition:
+                        // implement
+                        break;
+                    case InteractionCommandError.UnknownCommand:
+                        // implement
+                        break;
+                    case InteractionCommandError.BadArgs:
+                        // implement
+                        break;
+                    case InteractionCommandError.Exception:
+                        // implement
+                        break;
+                    case InteractionCommandError.Unsuccessful:
+                        // implement
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private async Task HandleInteraction(SocketInteraction arg)
+        {
+            try
+            {
+                var ctx = new SocketInteractionContext(_client, arg);
+                await _interactionService.ExecuteCommandAsync(ctx, _services);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                if (arg.Type == InteractionType.ApplicationCommand)
+                    await arg.GetOriginalResponseAsync().ContinueWith(async (msg) => await msg.Result.DeleteAsync());
+            }
         }
 
         public async Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> cachedMessage, Cacheable<IMessageChannel, ulong> originChannel, SocketReaction reaction)
