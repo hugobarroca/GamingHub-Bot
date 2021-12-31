@@ -1,6 +1,6 @@
 ﻿using ApiCalls;
 using Discord;
-using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using GamingHubBot.Application.Configuration;
 using GamingHubBot.Data;
@@ -8,10 +8,10 @@ using GamingHubBot.Infrastructure.Gateways;
 using GamingHubBot.Infrastructure.Repositories.DataAccess;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GamingHubBot
@@ -26,37 +26,57 @@ namespace GamingHubBot
             BuildConfig(builder);
             var config = builder.Build();
 
-            var socketConfig = new DiscordSocketConfig()
+            using var services = ConfigureServices(config);
+
+            var client = services.GetRequiredService<DiscordSocketClient>();
+            var commands = services.GetRequiredService<InteractionService>();
+
+            client.Log += LogAsync;
+            commands.Log += LogAsync;
+
+            client.Ready += async () =>
             {
-                GatewayIntents = 
-                GatewayIntents.GuildMessageReactions | 
-                GatewayIntents.GuildMessages |
-                GatewayIntents.Guilds
+                if (IsDebug())
+                    await commands.RegisterCommandsToGuildAsync(config.GetValue<ulong>("testGuild"), true);
+                else
+                    await commands.RegisterCommandsGloballyAsync(true);
             };
 
-            var host = Host.CreateDefaultBuilder()
-            .ConfigureLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddConsole();
-            })
-            .ConfigureServices((context, services) =>
-            {
-                services.AddSingleton<IGamingHubBot, GamingHubBot>()
+            await services.GetRequiredService<CommandHandler>().InitializeAsync();
+
+            await client.LoginAsync(TokenType.Bot, config["token"]);
+            await client.StartAsync();
+
+            await Task.Delay(Timeout.Infinite);
+        }
+
+
+        static ServiceProvider ConfigureServices(IConfiguration configuration)
+        {
+            return new ServiceCollection()
+                .AddSingleton(configuration)
+                .AddSingleton<DiscordSocketClient>()
+                .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
+                .AddSingleton<CommandHandler>()
                 .AddSingleton<ICommandHandler, CommandHandler>()
-                .AddSingleton<DiscordSocketClient>(x => new DiscordSocketClient(socketConfig))
-                .AddSingleton<CommandService>()
+                .AddSingleton<InteractionService>()
                 .AddSingleton<IDataAccess, SqlDataAccess>()
                 .AddSingleton<IAnimeApi, AnimeApi>()
-                .Configure<GeneralSettings>(config)
+                .AddLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
+                .Configure<GeneralSettings>(configuration)
                 .BuildServiceProvider();
-            })
-            .Build();
-
-            var bot = ActivatorUtilities.CreateInstance<GamingHubBot>(host.Services);
-            bot.Start();
-            await Task.Delay(-1);
         }
+
+        static Task LogAsync(LogMessage message)
+        {
+            Console.WriteLine(message.ToString());
+            return Task.CompletedTask;
+        }
+
 
         static void BuildConfig(IConfigurationBuilder builder)
         {
@@ -64,6 +84,12 @@ namespace GamingHubBot
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
                 .AddJsonFile("secrets.json", optional: false, reloadOnChange: true);
+        }
+
+
+        static bool IsDebug()
+        {
+            return true;
         }
 
     }

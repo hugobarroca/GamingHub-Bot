@@ -8,6 +8,6 @@ namespace GamingHubBot
     {
         Task HandleReactionAddedAsync(Cacheable<IUserMessage, ulong> cachedMessage, Cacheable<IMessageChannel, ulong> originChannel, SocketReaction reaction);
         Task HandleReactionRemovedAsync(Cacheable<IUserMessage, ulong> cachedMessage, Cacheable<IMessageChannel, ulong> originChannel, SocketReaction reaction);
-        Task InstallCommandsAsync();
+        Task InitializeAsync();
     }
 }
