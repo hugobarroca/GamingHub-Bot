@@ -41,12 +41,20 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
 
             using (var conn = new MySqlConnection(_options.DBConnection))
             {
-                foreach (var role in roles)
+                try
                 {
-                    sql += "INSERT IGNORE INTO Roles (Id, Name, Permitted, ColorId) VALUES (@Id, @Name, @Permitted, @ColorId);";
-                    await conn.ExecuteAsync(sql, new { Id = role.Id, Name = role.Name, Permitted = role.Permitted, ColorId = role.ColorId });
+                    foreach (var role in roles)
+                    {
+                        sql += "INSERT IGNORE INTO Roles (Id, Name, Permitted, ColorId) VALUES (@Id, @Name, @Permitted, @ColorId);";
+                        await conn.ExecuteAsync(sql, new { Id = role.Id, Name = role.Name, Permitted = role.Permitted, ColorId = role.ColorId });
+                    }
+                    _logger.LogInformation("Roles synchronized successfully!");
                 }
-                _logger.LogInformation("Roles synchronized successfully!");
+                catch (Exception ex)
+                {
+                    _logger.LogInformation("An error occurred while trying to synchronize roles.");
+                }
+
             }
         }
 
