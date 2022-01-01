@@ -70,7 +70,7 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError("Unable to retrieve roles from database.");
+                    _logger.LogError("Unable to retrieve roles from database. Exception occurred: {Exception}", ex);
                     return null;
                 }
             }
