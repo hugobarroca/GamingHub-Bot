@@ -25,17 +25,15 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
             _options = options.Value;
         }
 
-        public async Task SynchronizeRolesAsync(IEnumerable<Role> roles) 
+        public async Task SynchronizeRolesAsync(IEnumerable<Role> roles)
         {
             _logger.LogInformation("Synchronizing roles to the database...");
 
-            if (roles.Count() == 0) 
+            if (roles.Count() == 0)
             {
                 _logger.LogInformation("No roles to synchronize!");
                 return;
             }
-
-            var connectionId = _options.DBConnection;
 
             string sql = "";
 
@@ -55,6 +53,26 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                     _logger.LogInformation("An error occurred while trying to synchronize roles.");
                 }
 
+            }
+        }
+
+        public async Task<IEnumerable<Role>> GetRolesAsync() 
+        {
+            _logger.LogInformation("Getting roles from the database...");
+
+            string sql = "SELECT * FROM Roles";
+            using (var conn = new MySqlConnection(_options.DBConnection)) 
+            {
+                try
+                {
+                var roles = await conn.QueryAsync<Role>(sql);
+                return roles;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Unable to retrieve roles from database.");
+                    return null;
+                }
             }
         }
 
