@@ -36,7 +36,7 @@
                 return;
 
             Console.WriteLine($"User \"{user.Username}\" requested a ping.");
-            await RespondAsync("Bot is currently active!");
+            await RespondAsync("Bot is currently active!", ephemeral: true);
         }
 
         [SlashCommand("addrole", "Adds the request role to your roles.")]
@@ -53,14 +53,14 @@
             if (role == null)
             {
                 Console.WriteLine($"User \"{user.Username}\" tried to add itself to the role of \"{roleName}\", but such role could not be found.");
-                await RespondAsync("I couldn't find that role. Check for typing errors you doofus!");
+                await RespondAsync("I couldn't find that role. Check for typing errors you doofus!", ephemeral: true);
                 return;
             }
 
             if (user.Roles.Contains(role))
             {
                 Console.WriteLine($"User \"{user.Username}\" tried to add itself to the role of \"{role}\", but he already belonged to that role.");
-                await RespondAsync($"You already have the role of {role}!");
+                await RespondAsync($"You already have the role of {role}!", ephemeral: true);
             }
             else
             {
@@ -68,7 +68,7 @@
                 {
                     Console.WriteLine($"User \"{user.Username}\" added itself to the role of \"{role}\".");
                     await user.AddRoleAsync(role);
-                    await RespondAsync($"You have been given the role of {role}!");
+                    await RespondAsync($"You have been given the role of {role}!", ephemeral: true);
                 }
                 else
                 {
@@ -80,7 +80,7 @@
                     else
                     {
                         Console.WriteLine($"User \"{user.Username}\" tried to add itself to the role of \"{role}\", which is not a permitted role.\n");
-                        await RespondAsync("The role you tried to add is not a part of the permitted roles list!");
+                        await RespondAsync("The role you tried to add is not a part of the permitted roles list!", ephemeral: true);
                     }
                 }
             }
@@ -103,7 +103,7 @@
             if (!user.Roles.Contains(role))
             {
                 Console.WriteLine($"User \"{user.Username}\" tried to remove itself from the role of \"{role}\", but he did not belong to that role.");
-                await RespondAsync($"You do not have the role of {role}!");
+                await RespondAsync($"You do not have the role of {role}!", ephemeral: true);
             }
             else
             {
@@ -111,12 +111,12 @@
                 {
                     Console.WriteLine($"User \"{user.Username}\" removed itself from the role of \"{role}\".");
                     await user.RemoveRoleAsync(role);
-                    await RespondAsync($"You have been removed from the role of {role}!");
+                    await RespondAsync($"You have been removed from the role of {role}!", ephemeral: true);
                 }
                 else
                 {
                     Console.WriteLine($"User \"{user.Username}\" tried to remove itself from the role of \"{role}\", but that role is not in the permitted roles list.");
-                    await RespondAsync("Why would you try and do that? o.O");
+                    await RespondAsync("Why would you try and do that? o.O", ephemeral: true);
                 }
             }
         }
@@ -144,7 +144,7 @@
                     roles += $", {role}";
                 }
             }
-            await RespondAsync($"**Permitted roles**: {roles}");
+            await RespondAsync($"**Permitted roles**: {roles}", ephemeral: true);
         }
 
         [SlashCommand("createrole", "Creates a new role.")]
@@ -153,7 +153,7 @@
             var user = Context.User;
             if (user.Id != _gameMasterId)
             {
-                await RespondAsync("You don't have permission to run this command as of now.");
+                await RespondAsync("You don't have permission to run this command as of now.", ephemeral: true);
             }
             return;
         }
@@ -176,7 +176,7 @@
 
             if (colors == null)
             {
-                await RespondAsync("Sorry, I couldn't get the color list at this time. :(");
+                await RespondAsync("Sorry, I couldn't get the color list at this time. :(", ephemeral: true);
                 return;
             }
 
