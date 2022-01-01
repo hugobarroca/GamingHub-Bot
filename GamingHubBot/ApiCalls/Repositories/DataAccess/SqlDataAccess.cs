@@ -44,7 +44,7 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                 {
                     foreach (var role in rolesToInsert)
                     {
-                        sql += "INSERT IGNORE INTO Roles (Id, Name, Permitted, ColorId) VALUES (@Id, @Name, @Permitted, @ColorId);";
+                        sql += "INSERT INTO Roles (Id, Name, Permitted, ColorId) VALUES (@Id, @Name, @Permitted, @ColorId);";
                         await conn.ExecuteAsync(sql, new { Id = role.Id, Name = role.Name, Permitted = role.Permitted, ColorId = role.ColorId });
                     }
                     foreach (var role in rolesToRemove)
@@ -62,6 +62,30 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
             }
         }
 
+        public async Task AddRoleToPermittedList(ulong id) 
+        {
+            _logger.LogInformation("Changing role to permitted in the database...");
+
+            string sql = @"UPDATE Roles 
+                           SET Permitted = 1 
+                           WHERE Id=@Id;";
+
+            using (var conn = new MySqlConnection(_options.DBConnection))
+            {
+                try
+                {
+                    await conn.ExecuteAsync(sql, new { Id = id });
+                    _logger.LogInformation("Role was updated successfully!");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogInformation("An error occurred while trying to update role.");
+                }
+
+            }
+
+
+        }
         public async Task<IEnumerable<Role>> GetRolesAsync() 
         {
             _logger.LogInformation("Getting roles from the database...");
