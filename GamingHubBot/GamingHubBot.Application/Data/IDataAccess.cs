@@ -5,6 +5,7 @@ namespace GamingHubBot.Data
 {
     public interface IDataAccess
     {
-        public Task<List<Color>> GetColors();
+        public Task SynchronizeRolesAsync(IEnumerable<Role> roles);
+        public Task<List<Color>> GetColorsAsync();
     }
 }

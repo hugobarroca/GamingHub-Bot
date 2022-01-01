@@ -36,8 +36,9 @@ namespace GamingHubBot
 
             client.Ready += async () =>
             {
+                var testGuildId = config.GetValue<ulong>("TestGuildId");
                 if (IsDebug())
-                    await commands.RegisterCommandsToGuildAsync(config.GetValue<ulong>("testGuild"), true);
+                    await commands.RegisterCommandsToGuildAsync(testGuildId, true);
                 else
                     await commands.RegisterCommandsGloballyAsync(true);
             };

@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Interactions;
 using Discord.WebSocket;
+using GamingHubBot.Application;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,20 +29,15 @@ namespace GamingHubBot
         public async Task InitializeAsync()
         {
             await _interactionService.AddModuleAsync<InfoModule>(_services);
+            await _interactionService.AddModuleAsync<RoleModule>(_services);
             await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
             _client.InteractionCreated += HandleInteraction;
 
-
-            //_client.InteractionCreated += HandleInteraction;
-
-            // Process the command execution results 
             _interactionService.SlashCommandExecuted += SlashCommandExecuted;
             _interactionService.ContextCommandExecuted += ContextCommandExecuted;
             _interactionService.ComponentCommandExecuted += ComponentCommandExecuted;
 
-            //Event handlers
-            //_client.MessageReceived += HandleCommandAsync;
             _client.ReactionAdded += HandleReactionAddedAsync;
             _client.ReactionRemoved += HandleReactionRemovedAsync;
 

@@ -8,7 +8,7 @@ namespace GamingHubBot.Application.Entities
 {
     public class Color
     {
-        public int Id { get; set; }
+        public ulong Id { get; set; }
         public string? Name { get; set; }
         public string? Red { get; set; }
         public string? Blue { get; set; }
