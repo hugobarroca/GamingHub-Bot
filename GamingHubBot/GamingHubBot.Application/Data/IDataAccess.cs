@@ -1,13 +1,12 @@
-﻿using GamingHubBot.Entities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using GamingHubBot.Application.Entities;
 
 
 namespace GamingHubBot.Data
 {
     public interface IDataAccess
     {
-        public string GetConnectionString();
-        public Task<IEnumerable<DataEntity>> GetData();
+        public Task SynchronizeRolesAsync(IEnumerable<Role> rolesToInsert, IEnumerable<Role> rolesToRemove);
+        public Task<IEnumerable<Role>> GetRolesAsync();
+        public Task<List<Color>> GetColorsAsync();
     }
 }
