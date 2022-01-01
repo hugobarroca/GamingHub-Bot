@@ -4,6 +4,7 @@ using GamingHubBot.Application.Entities;
 using GamingHubBot.Infrastructure.Gateways;
 using global::GamingHubBot.Data;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace GamingHubBot.Application
 {
@@ -125,16 +126,25 @@ namespace GamingHubBot.Application
         [SlashCommand("synchronizeroles", "Synchronizes current server roles with the database.")]
         public async Task SynchronizeRoles() 
         {
-            var dbRoles = new List<Role>();
-            var roles = Context.Guild.Roles;
+            await DeferAsync(true);
 
-            foreach (var role in roles) 
+            var currentDbRoles = await _dataAccess.GetRolesAsync();
+
+            var rolesToInsert = new List<Role>();
+
+            IEnumerable<Role> rolesToRemove = new List<Role>(currentDbRoles);
+
+            foreach (var role in Context.Guild.Roles) 
             {
-                dbRoles.Add(new Role { Id = role.Id, Name = role.Name, Permitted = false, ColorId = null});
+                rolesToRemove = rolesToRemove.Where(x => x.Id != role.Id);
+
+                if (!currentDbRoles.Any(x => x.Id == role.Id)) 
+                {
+                    rolesToInsert.Add(new Role { Id = role.Id, Name = role.Name, Permitted = false, ColorId = null});
+                }
             }
 
-            await DeferAsync(true);
-            await _dataAccess.SynchronizeRolesAsync(dbRoles);
+            await _dataAccess.SynchronizeRolesAsync(rolesToInsert, rolesToRemove);
             
             await FollowupAsync("Roles were synchronized successfully!");
         }

@@ -25,11 +25,11 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
             _options = options.Value;
         }
 
-        public async Task SynchronizeRolesAsync(IEnumerable<Role> roles)
+        public async Task SynchronizeRolesAsync(IEnumerable<Role> rolesToInsert, IEnumerable<Role> rolesToRemove)
         {
             _logger.LogInformation("Synchronizing roles to the database...");
 
-            if (roles.Count() == 0)
+            if (rolesToInsert.Count() == 0 && rolesToRemove.Count() == 0)
             {
                 _logger.LogInformation("No roles to synchronize!");
                 return;
@@ -37,16 +37,22 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
 
             string sql = "";
 
+            //TODO: Implement transaction, improve error handling
             using (var conn = new MySqlConnection(_options.DBConnection))
             {
                 try
                 {
-                    foreach (var role in roles)
+                    foreach (var role in rolesToInsert)
                     {
                         sql += "INSERT IGNORE INTO Roles (Id, Name, Permitted, ColorId) VALUES (@Id, @Name, @Permitted, @ColorId);";
                         await conn.ExecuteAsync(sql, new { Id = role.Id, Name = role.Name, Permitted = role.Permitted, ColorId = role.ColorId });
                     }
-                    _logger.LogInformation("Roles synchronized successfully!");
+                    foreach (var role in rolesToRemove)
+                    {
+                        sql += "DELETE FROM Roles WHERE Id=@Id";
+                        await conn.ExecuteAsync(sql, new { Id = role.Id });
+                    }
+                    _logger.LogInformation("Roles synchronized successfully! Inserted {insertedRoles} roles and removed {removedRoles} roles!", rolesToInsert.Count(), rolesToRemove.Count());
                 }
                 catch (Exception ex)
                 {
