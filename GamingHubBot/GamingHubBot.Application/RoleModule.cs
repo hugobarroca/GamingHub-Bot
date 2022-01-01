@@ -133,7 +133,7 @@ namespace GamingHubBot.Application
                 dbRoles.Add(new Role { Id = role.Id, Name = role.Name, Permitted = false, ColorId = null});
             }
 
-            await DeferAsync();
+            await DeferAsync(true);
             await _dataAccess.SynchronizeRolesAsync(dbRoles);
             
             await FollowupAsync("Roles were synchronized successfully!");
