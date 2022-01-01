@@ -152,9 +152,13 @@ namespace GamingHubBot.Application
         [SlashCommand("addroletopermitted", "Adds the chosen role to the permitted roles list.")]
         public async Task AddRoleToPermittedList(SocketRole role) 
         {
+            await DeferAsync(true);
+
             _logger.LogInformation("Adding role to the permitted list...");
             await _dataAccess.AddRoleToPermittedList(role.Id);
             _logger.LogInformation("Role added successfully!");
+
+            await FollowupAsync("Role was added successfully!");
         }
 
         [SlashCommand("colors", "Returns all available role colors.")]
