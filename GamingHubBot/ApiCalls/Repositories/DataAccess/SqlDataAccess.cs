@@ -56,7 +56,7 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogInformation("An error occurred while trying to synchronize roles.");
+                    _logger.LogInformation("An exception occurred while trying to synchronize roles: {Exception}", ex);
                 }
 
             }
@@ -79,7 +79,7 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogInformation("An error occurred while trying to update role.");
+                    _logger.LogInformation("An exception occurred while trying to update role: {Exception}", ex);
                 }
 
             }
