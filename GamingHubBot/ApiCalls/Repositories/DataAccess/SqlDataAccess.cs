@@ -105,7 +105,25 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                 }
             }
         }
+        public async Task<IEnumerable<Role>> GetPermittedRolesAsync() 
+        {
+            _logger.LogInformation("Getting permitted roles from the database...");
 
+            string sql = "SELECT * FROM Roles WHERE Permitted = 1";
+            using (var conn = new MySqlConnection(_options.DBConnection))
+            {
+                try
+                {
+                    var roles = await conn.QueryAsync<Role>(sql);
+                    return roles;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Unable to retrieve permitted roles from database. Exception occurred: {Exception}", ex);
+                    return null;
+                }
+            }
+        }
         public async Task<List<Color>> GetColorsAsync()
         {
             try

@@ -95,20 +95,24 @@ namespace GamingHubBot.Application
 
             _logger.LogInformation($"User \"{user.Username}\" requested information on permitted roles.");
 
+            var permittedRoles = await _dataAccess.GetPermittedRolesAsync();
+            permittedRoles = permittedRoles.OrderBy(x => x.Name);
+
             string roles = "";
-            int i = 0;
+            var i = 0;
             foreach (var role in permittedRoles)
             {
                 if (i == 0)
                 {
-                    roles += $"{role}";
+                    roles += $"{role.Name}";
                     i++;
                 }
                 else
                 {
-                    roles += $", {role}";
+                    roles += $", {role.Name}";
                 }
             }
+            _logger.LogInformation($"User \"{user.Username}\" requested information on permitted roles.");
             await RespondAsync($"**Permitted roles**: {roles}", ephemeral: true);
         }
 
