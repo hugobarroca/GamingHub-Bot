@@ -28,6 +28,13 @@
         public async Task Echo(string input)
         {
             var user = Context.User as SocketGuildUser;
+            if (user == null)
+            {
+                _logger.LogError("User returned null from context...");
+                await RespondAsync("Something went wrong, invalid user.");
+                return;
+            }
+
             _logger.LogInformation($"User \"{user.Username}\" echoed a message.");
             await RespondAsync(input);
         }
@@ -36,6 +43,12 @@
         public async Task Ping()
         {
             var user = Context.User as SocketGuildUser;
+            if (user == null)
+            {
+                _logger.LogError("User returned null from context...");
+                await RespondAsync("Something went wrong, invalid user.");
+                return;
+            }
             _logger.LogInformation($"User \"{user.Username}\" requested a ping.");
             await RespondAsync("Bot is currently active!", ephemeral: true);
         }

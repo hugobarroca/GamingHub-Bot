@@ -29,6 +29,12 @@ namespace GamingHubBot.Application
         public async Task AddRole(SocketRole role)
         {
             var user = Context.User as SocketGuildUser;
+            if (user == null)
+            {
+                _logger.LogError("User returned null from context...");
+                await RespondAsync("Something went wrong, invalid user.");
+                return;
+            }
 
             if (user.Roles.Contains(role))
             {
@@ -64,6 +70,13 @@ namespace GamingHubBot.Application
         {
             var user = Context.User as SocketGuildUser;
             var roles = Context.Guild.Roles;
+
+            if (user == null)
+            {
+                _logger.LogError("User returned null from context...");
+                await RespondAsync("Something went wrong, invalid user.");
+                return;
+            }
 
             if (!user.Roles.Contains(role))
             {
