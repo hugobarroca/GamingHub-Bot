@@ -49,7 +49,7 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                     }
                     foreach (var role in rolesToRemove)
                     {
-                        sql += "DELETE FROM Roles WHERE Id=@Id";
+                        sql += "DELETE FROM Roles WHERE Id=@Id;";
                         await conn.ExecuteAsync(sql, new { Id = role.Id });
                     }
                     _logger.LogInformation("Roles synchronized successfully! Inserted {insertedRoles} roles and removed {removedRoles} roles!", rolesToInsert.Count(), rolesToRemove.Count());
