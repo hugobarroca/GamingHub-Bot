@@ -405,3 +405,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+#VS COde
+*/.vscode/

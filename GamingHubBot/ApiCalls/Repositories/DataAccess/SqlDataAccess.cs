@@ -49,14 +49,14 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                     }
                     foreach (var role in rolesToRemove)
                     {
-                        sql += "DELETE FROM Roles WHERE Id=@Id";
+                        sql += "DELETE FROM Roles WHERE Id=@Id;";
                         await conn.ExecuteAsync(sql, new { Id = role.Id });
                     }
                     _logger.LogInformation("Roles synchronized successfully! Inserted {insertedRoles} roles and removed {removedRoles} roles!", rolesToInsert.Count(), rolesToRemove.Count());
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogInformation("An error occurred while trying to synchronize roles.");
+                    _logger.LogInformation("An exception occurred while trying to synchronize roles: {Exception}", ex);
                 }
 
             }
@@ -79,7 +79,7 @@ namespace GamingHubBot.Infrastructure.Repositories.DataAccess
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogInformation("An error occurred while trying to update role.");
+                    _logger.LogInformation("An exception occurred while trying to update role: {Exception}", ex);
                 }
 
             }
