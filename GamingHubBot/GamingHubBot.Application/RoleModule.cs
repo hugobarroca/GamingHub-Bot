@@ -1,10 +1,11 @@
 ﻿using Discord.Interactions;
 using Discord.WebSocket;
+using GamingHubBot.Application.Configuration;
 using GamingHubBot.Application.Entities;
 using GamingHubBot.Infrastructure.Gateways;
 using global::GamingHubBot.Data;
 using Microsoft.Extensions.Logging;
-using System.Linq;
+using Microsoft.Extensions.Options;
 
 namespace GamingHubBot.Application
 {
@@ -13,15 +14,17 @@ namespace GamingHubBot.Application
         private readonly IDataAccess _dataAccess;
         private readonly IAnimeApi _animeApi;
         private readonly ILogger<InfoModule> _logger;
+        private readonly ulong _gameMasterId;
 
-        public RoleModule(ILogger<InfoModule> logger, IDataAccess dataAccess, IAnimeApi animeApi)
+        public RoleModule(ILogger<InfoModule> logger, IDataAccess dataAccess, IAnimeApi animeApi, IOptions<GeneralSettings> options)
         {
             _logger = logger;
             _dataAccess = dataAccess;
             _animeApi = animeApi;
+            _gameMasterId = options.Value.GameMasterId;
         }
 
-        private readonly ulong _gameMasterId = 207178008706940928;
+
         List<string> permittedRoles = new List<string>() { "Bishop", "Freeloaders", "Ghost", "Hunter", "Impostor", "Pirate", "Summoner", "S.W.A.T.", "Tiefling", "Waifu" };
 
 
@@ -111,20 +114,15 @@ namespace GamingHubBot.Application
             var permittedRoles = await _dataAccess.GetPermittedRolesAsync();
             permittedRoles = permittedRoles.OrderBy(x => x.Name);
 
-            string roles = "";
-            var i = 0;
+            List<string> rolesList = new List<string>();
+
             foreach (var role in permittedRoles)
             {
-                if (i == 0)
-                {
-                    roles += $"{role.Name}";
-                    i++;
-                }
-                else
-                {
-                    roles += $", {role.Name}";
-                }
+                rolesList.Add(role.Name);
             }
+
+            string roles = string.Join(", ", rolesList);
+
             _logger.LogInformation($"User \"{user.Username}\" requested information on permitted roles.");
             await RespondAsync($"**Permitted roles**: {roles}", ephemeral: true);
         }
@@ -136,6 +134,10 @@ namespace GamingHubBot.Application
             if (user.Id != _gameMasterId)
             {
                 await RespondAsync("You don't have permission to run this command as of now.", ephemeral: true);
+            }
+            else 
+            {
+                await RespondAsync(roleName, ephemeral: true);  
             }
             return;
         }
