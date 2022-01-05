@@ -172,7 +172,12 @@ namespace GamingHubBot.Application
         public async Task AddRoleToPermittedList(SocketRole role) 
         {
             await DeferAsync(true);
-
+            var user = Context.User;
+            if (user.Id != _gameMasterId)
+            {
+                await RespondAsync("You don't have permission to run this command as of now.", ephemeral: true);
+                return;
+            }
             _logger.LogInformation("Adding role to the permitted list...");
             await _dataAccess.AddRoleToPermittedList(role.Id);
             _logger.LogInformation("Role added successfully!");
